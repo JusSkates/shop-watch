@@ -1,0 +1,50 @@
+# Runs the JusSlabs shop watch every day and publishes the report as a web page.
+# This file belongs at .github/workflows/shop-watch.yml in the repository.
+name: Shop watch
+
+on:
+  schedule:
+    - cron: '0 2 * * *'    # 02:00 UTC daily = 3am UK in summer, 2am in winter
+  workflow_dispatch:        # adds a "Run workflow" button for manual runs
+
+permissions:
+  contents: write
+
+concurrency:
+  group: shop-watch
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Yesterday's snapshot and past reports live on the gh-pages branch.
+      - name: Fetch previous results
+        run: |
+          git clone --depth 1 --branch gh-pages "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site || mkdir site
+          rm -rf site/.git
+
+      - name: Scan the shops
+        run: node jusslabs-shop-watch.mjs
+        env:
+          SHOP_WATCH_DIR: site
+
+      # Publish as a single fresh commit so the repository does not grow every day.
+      - name: Publish report
+        run: |
+          cd site
+          cp report.html index.html
+          touch .nojekyll
+          git init -q -b gh-pages
+          git config user.name "shop-watch"
+          git config user.email "shop-watch@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Shop watch $(date -u +%F)"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
