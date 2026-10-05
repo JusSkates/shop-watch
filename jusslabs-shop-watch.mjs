@@ -292,10 +292,20 @@ const DIR = process.env.SHOP_WATCH_DIR ? path.resolve(process.env.SHOP_WATCH_DIR
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
 
+// Sent with every request so the shops see an ordinary browser page load.
+const HEADERS = {
+  'User-Agent': UA,
+  Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,application/json;q=0.8,*/*;q=0.7',
+  'Accept-Language': 'ja,en-GB;q=0.8,en;q=0.7',
+  'Cache-Control': 'no-cache',
+  'Upgrade-Insecure-Requests': '1',
+  'Sec-Fetch-Dest': 'document', 'Sec-Fetch-Mode': 'navigate', 'Sec-Fetch-Site': 'none', 'Sec-Fetch-User': '?1',
+};
+
 async function request(url) {
   for (let i = 0; i < 4; i++) {
     let r;
-    try { r = await fetch(url, { headers: { 'User-Agent': UA, 'Accept-Language': 'ja,en;q=0.8' } }); }
+    try { r = await fetch(url, { headers: HEADERS, redirect: 'follow' }); }
     catch (e) { if (i === 3) throw e; await sleep(2000 * (i + 1)); continue; }
     if (r.status === 429 || r.status >= 500) { await sleep(2500 * (i + 1)); continue; }
     if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -497,6 +507,7 @@ for (const id of ids) {
   const t = Date.now();
   scans[id] = await SHOPS[id].scan(SHOPS[id]);
   console.log(scans[id].items.length + ' listings, ' + scans[id].failed.length + ' sources failed, ' + Math.round((Date.now() - t) / 1000) + 's');
+  if (scans[id].failed.length) console.log('  Failed: ' + scans[id].failed.slice(0, 4).join(', ') + (scans[id].failed.length > 4 ? ', and ' + (scans[id].failed.length - 4) + ' more' : ''));
 }
 const diff = compare(prev, scans, today);
 const html = report(diff, scans, today, prev.at);
