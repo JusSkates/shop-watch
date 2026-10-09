@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JusSlabs shop watch 2026-10-09</title>
+<style>
+:root{--ink:#1d2433;--mute:#667085;--line:#d9dee7;--paper:#f6f7f9;--blue:#1f4fd8;--a:#0b7a53;--am:#a15c00;--bad:#b42318}
+*{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI","Hiragino Sans","Yu Gothic",sans-serif}
+body{margin:0;background:var(--paper);color:var(--ink)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:18px 24px;position:sticky;top:0;z-index:2}
+h1{font-size:20px;margin:0 0 4px} .sub{color:var(--mute);font-size:13px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;color:var(--mute);font-size:13px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.jump{font-size:13px;color:var(--blue);text-decoration:none;margin-left:6px}
+main{padding:8px 24px 40px} section{margin-top:26px}
+h2{font-size:17px;margin:0} h2 small{color:var(--mute);font-weight:500;margin-left:6px} section>p{margin:4px 0 0;color:var(--mute);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:14px}
+.tile{position:relative;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;color:inherit;text-decoration:none}
+.tile:focus-visible,.chip:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.pic{display:block;background:#eef0f4;aspect-ratio:63/88} .pic img{width:100%;height:100%;object-fit:contain;display:block}
+.tile.gone .pic img{filter:grayscale(1);opacity:.6}
+.cond{position:absolute;top:8px;right:8px;font-size:17px;padding:4px 10px;border-radius:7px;font-weight:800;color:#fff;background:var(--a)} .cond.minus{background:var(--am)}
+.info{padding:10px 12px 12px;display:flex;flex-direction:column;gap:3px}
+.price{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums} .price s{font-size:13px;font-weight:500;color:var(--mute)}
+.price em{font-style:normal;font-size:13px} em.down{color:var(--a)} em.up{color:var(--bad)}
+.meta,.name{font-size:12px;color:var(--mute)} .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.empty,.warn{font-size:13px;color:var(--mute);margin-top:10px} .warn{color:var(--bad)}
+</style></head><body>
+<header><h1>Shop watch, 2026-10-09</h1>
+<div class="sub">First run: this is the baseline, so changes start showing from the next run. 4,797 top-condition listings in stock across Torecacamp, Card Rush, Hareruya 2.</div>
+<div class="bar"><button class="chip" data-shop="tc" aria-pressed="true">Torecacamp</button><button class="chip" data-shop="cr" aria-pressed="true">Card Rush</button><button class="chip" data-shop="h2" aria-pressed="true">Hareruya 2</button>
+<a class="jump" href="#added">New since last run (0)</a><a class="jump" href="#down">Price drops (0)</a><a class="jump" href="#gone">Gone since last run (0)</a><a class="jump" href="#up">Price rises (0)</a></div></header>
+<main>
+<p class="warn">Could not read 13 sources today, so their listings were carried over unchanged: Card Rush: 草 (HTTP 403), Card Rush: 旧裏 feature (HTTP 403), Card Rush: 炎 (HTTP 403), Card Rush: 水 (HTTP 403), Card Rush: 雷 (HTTP 403), Card Rush: 超 (HTTP 403), Card Rush: 闘 (HTTP 403), Card Rush: 悪 (HTTP 403), Card Rush: 鋼 (HTTP 403), Card Rush: 妖 (HTTP 403), Card Rush: 竜 (HTTP 403), Card Rush: 無 (HTTP 403), Card Rush: その他 (HTTP 403)</p>
+<section id="added"><h2>New since last run<small>0</small></h2><p>Listings that were not in stock last time.</p><p class="empty">Nothing here this run.</p></section>
+<section id="down"><h2>Price drops<small>0</small></h2><p>Same listing, cheaper than last time.</p><p class="empty">Nothing here this run.</p></section>
+<section id="gone"><h2>Gone since last run<small>0</small></h2><p>Sold out or delisted. Prices shown are the last ones seen.</p><p class="empty">Nothing here this run.</p></section>
+<section id="up"><h2>Price rises<small>0</small></h2><p>Same listing, dearer than last time.</p><p class="empty">Nothing here this run.</p></section>
+</main>
+<script>
+document.querySelectorAll('.chip').forEach(function(c){c.addEventListener('click',function(){
+  var on=c.getAttribute('aria-pressed')!=='true';c.setAttribute('aria-pressed',on);
+  document.querySelectorAll('.tile[data-shop="'+c.dataset.shop+'"]').forEach(function(t){t.style.display=on?'':'none'});
+});});
+</script></body></html>
